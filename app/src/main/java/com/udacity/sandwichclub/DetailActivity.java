@@ -13,7 +13,6 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private ImageView mSandwichImageView;
     private TextView mAlsoKnownTextView;
     private TextView mOriginTextView;
     private TextView mIngredientsTextView;
@@ -28,6 +27,10 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
+        mAlsoKnownTextView = findViewById(R.id.also_known_tv);
+        mOriginTextView = findViewById(R.id.origin_tv);
+        mIngredientsTextView = findViewById(R.id.ingredients_tv);
+        mDescriptionTextView = findViewById(R.id.description_tv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -50,7 +53,8 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
+
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -63,7 +67,20 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        StringBuilder alsoKnownAsBuilder = new StringBuilder();
+        for (String name : sandwich.getAlsoKnownAs()) {
+            alsoKnownAsBuilder.append(name + "\n");
+        }
 
+        StringBuilder ingredientsBuilder = new StringBuilder();
+        for (String ingredient : sandwich.getIngredients()) {
+            ingredientsBuilder.append(ingredient + "\n");
+        }
+
+        mAlsoKnownTextView.setText(alsoKnownAsBuilder.toString());
+        mOriginTextView.setText(sandwich.getPlaceOfOrigin());
+        mIngredientsTextView.setText(ingredientsBuilder.toString());
+        mDescriptionTextView.setText(sandwich.getDescription());
     }
 }
